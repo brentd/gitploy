@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{gitploy}
-  s.version = "0.1.1"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Brent Dillingham"]
@@ -18,13 +18,14 @@ Gem::Specification.new do |s|
     "README.markdown"
   ]
   s.files = [
-    "README.markdown",
+    ".gitignore",
+     "README.markdown",
      "Rakefile",
      "VERSION",
      "bin/gitploy",
      "gitploy.gemspec",
      "lib/gitploy.rb",
-     "lib/script.rb"
+     "lib/gitploy/script.rb"
   ]
   s.homepage = %q{http://github.com/brentd/gitploy}
   s.rdoc_options = ["--charset=UTF-8"]
