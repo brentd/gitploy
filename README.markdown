@@ -15,6 +15,9 @@ strategy. No hooks, very little behind-the-scenes magic - it just does what you 
 
 ### Example config/deploy.rb
 
+
+    require 'gitploy/script'
+
     configure do |c|
       c.repo = 'git@github.com:myuser/fooapp.git'
       c.path = '/var/www/fooapp'
@@ -57,3 +60,9 @@ strategy. No hooks, very little behind-the-scenes magic - it just does what you 
 ### Disclaimer
 
 Gitploy is super alpha - don't use it yet, unless you're just that baller. Are you?
+
+### Known issues
+
+* No tests :(
+* Not enough documentation
+* DSL implementation is pretty dumb and needs refactoring
