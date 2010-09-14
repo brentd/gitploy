@@ -38,7 +38,7 @@ strategy. No hooks, very little behind-the-scenes magic - it just does what you 
     end
 
     deploy do
-      push
+      push!
       remote do
         run "cd #{config.path}"
         run "git reset --hard"
@@ -46,6 +46,13 @@ strategy. No hooks, very little behind-the-scenes magic - it just does what you 
         run "touch tmp/restart.txt"
       end
     end
+
+### Usage
+
+    $ gem install gitploy
+    # create config/deploy.rb
+    $ gitploy production setup
+    $ gitploy production
 
 ### Disclaimer
 

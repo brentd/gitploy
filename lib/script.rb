@@ -1,0 +1,2 @@
+require 'gitploy'
+include Gitploy

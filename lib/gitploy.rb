@@ -13,7 +13,7 @@ module Gitploy
     end
 
     def missing_options
-      REQUIRED_OPTIONS.select {|m| send(m) == nil }
+      REQUIRED_OPTIONS.select {|m| send(m).nil? }
     end
   end
 
@@ -27,16 +27,20 @@ module Gitploy
     ARGV[0]
   end
 
+  def action
+    ARGV[1]
+  end
+
   def stage(name)
     yield if name.to_s == current_stage
   end
 
   def deploy
-    yield if ARGV[1].nil?
+    yield if action.nil? || action == 'deploy'
   end
 
   def setup
-    yield if ARGV[1] == 'setup'
+    yield if action == 'setup'
   end
 
   def remote
@@ -61,7 +65,7 @@ module Gitploy
     run("rake #{task}")
   end
 
-  def push
+  def push!
     local { run "git push #{config.user}@#{config.host}:#{config.path}/.git master" }
   end
 
@@ -80,7 +84,7 @@ module Gitploy
       if title
         half_width = (width / 2) - (title.length / 2) - 2
         left_bar  = '=' * half_width
-        right_bar = '=' * (title.length % 2 == 0 ? half_width : half_width - 1)
+        right_bar = '=' * (title.length % 2 == 0 ? half_width : half_width - 1) # TODO: lame.
         puts "#{left_bar}( #{title} )#{right_bar}"
       else
         puts "=" * width
@@ -97,5 +101,3 @@ module Gitploy
       cmd
     end
 end
-
-include Gitploy
