@@ -37,6 +37,8 @@ strategy. No hooks, very little behind-the-scenes magic - it just does what you 
       remote do
         run "mkdir -p #{config.path}"
         run "cd #{config.path} && git init"
+        run "git config --bool receive.denyNonFastForwards false"
+        run "git config receive.denyCurrentBranch ignore"
       end
     end
 
