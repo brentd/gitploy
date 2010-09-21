@@ -5,6 +5,7 @@ module Gitploy
   class Config
     REQUIRED_OPTIONS = [:repo, :path, :user, :host]
     attr_accessor *REQUIRED_OPTIONS
+    attr_accessor :local_branch, :remote_branch
 
     def check!
       unless missing_options.empty?
@@ -20,6 +21,10 @@ module Gitploy
   def configure
     config = Config.new
     yield config; config.check!
+
+    config.local_branch ||= current_branch
+    config.remote_branch ||= 'master'
+
     self.config = config
   end
 
@@ -66,7 +71,7 @@ module Gitploy
   end
 
   def push!
-    local { run "git push #{config.user}@#{config.host}:#{config.path}/.git master" }
+    local { run "git push #{config.user}@#{config.host}:#{config.path}/.git #{config.local_branch}:#{config.remote_branch}" }
   end
 
   private
@@ -99,5 +104,13 @@ module Gitploy
       cmd = run_queue.join(' && ')
       @run_queue = []
       cmd
+    end
+
+    def current_branch
+      if branch = `git symbolic-ref HEAD`
+        branch.chomp.gsub('refs/heads/', '')
+      else
+        'master'
+      end
     end
 end
