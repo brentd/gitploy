@@ -65,6 +65,5 @@ Gitploy is super alpha - don't use it yet, unless you're just that baller. Are y
 
 ### Known issues
 
-* No tests :(
 * Not enough documentation
 * DSL implementation is pretty dumb and needs refactoring
