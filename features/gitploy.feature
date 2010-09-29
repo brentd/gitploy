@@ -5,7 +5,7 @@ Feature: gitploy
     When I run "gitploy <arguments>"
     Then the output should contain:
       """
-      The following configuration options are missing for the 'staging' stage: repo, path, user, host
+      The following configuration options are missing for the 'staging' stage: path, user, host
       """
     Examples:
       | arguments     |

@@ -15,7 +15,6 @@ Given /^a valid configuration file$/ do
     require 'gitploy/script'
 
     configure do |c|
-      c.repo = 'git@github.com:brentd/gitploy.git'
       c.path = '/var/www/fooapp'
       c.local_branch = 'master'
       c.remote_branch = 'master'
