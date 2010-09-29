@@ -19,7 +19,6 @@ strategy. No hooks, very little behind-the-scenes magic - it just does what you 
     require 'gitploy/script'
 
     configure do |c|
-      c.repo = 'git@github.com:myuser/fooapp.git'
       c.path = '/var/www/fooapp'
 
       stage :staging do
