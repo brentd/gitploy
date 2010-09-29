@@ -51,11 +51,13 @@ Feature: gitploy
     And the output should contain "production@gitploy.foo"
     But the output should not contain "Deploy local"
     And the output should not contain "staging@staging.gitploy.foo"
+    And the output should not contain "git push"
 
   Scenario: Deploy on production
     Given a valid configuration file
     When I run "gitploy production --pretend"
     Then the output should contain "Deploy local"
     And the output should contain "production@gitploy.foo"
+    And the output should contain "git push"
     But the output should not contain "Setup local"
     And the output should not contain "staging@staging.gitploy.foo"
