@@ -3,7 +3,7 @@ module Gitploy
   attr_accessor :config
 
   class Config
-    REQUIRED_OPTIONS = [:repo, :path, :user, :host]
+    REQUIRED_OPTIONS = [:path, :user, :host]
     attr_accessor *REQUIRED_OPTIONS
     attr_accessor :local_branch, :remote_branch
 
