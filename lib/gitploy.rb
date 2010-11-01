@@ -41,7 +41,7 @@ module Gitploy
   end
 
   def deploy
-    yield if action.nil? || action == 'deploy'
+    yield unless action == 'setup'
   end
 
   def setup
@@ -82,13 +82,14 @@ module Gitploy
       print_bar(100, title)
       puts "> #{cmd}"
       puts
-      Kernel.system(cmd)
+      Kernel.system(cmd) unless pretend?
       print_bar(100)
     end
 
   #FIXME move to representation class
     def print_bar(width, title=nil)
       if title
+        title += " (pretend)" if pretend?
         half_width = (width / 2) - (title.length / 2) - 2
         left_bar  = '=' * half_width
         right_bar = '=' * (title.length % 2 == 0 ? half_width : half_width - 1) # TODO: lame.
@@ -114,5 +115,10 @@ module Gitploy
       else
         'master'
       end
+    end
+
+    def pretend?
+      pretend = %w(-p --pretend)
+      ARGV.any? { |v| pretend.include? v }
     end
 end
