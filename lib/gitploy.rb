@@ -76,6 +76,7 @@ module Gitploy
 
   private
 
+  #FIXME move to representation class
     def pretty_run(title, cmd)
       puts
       print_bar(100, title)
@@ -85,6 +86,7 @@ module Gitploy
       print_bar(100)
     end
 
+  #FIXME move to representation class
     def print_bar(width, title=nil)
       if title
         half_width = (width / 2) - (title.length / 2) - 2
