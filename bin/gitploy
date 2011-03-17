@@ -1,2 +1,2 @@
 #!/usr/bin/env ruby
-load('config/deploy.rb')
+load('config/gitploy.rb')

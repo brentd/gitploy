@@ -13,8 +13,7 @@ require git hooks, it just does the bare minimum. It's so minimal, in fact, that
 come with its own "recipe" - Gitploy is actually just a DSL to quickly define your own deployment
 strategy. No hooks, very little behind-the-scenes magic - it just does what you tell it to.
 
-### Example config/deploy.rb
-
+### Example config/gitploy.rb
 
     require 'gitploy/script'
 
