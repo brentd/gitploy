@@ -66,12 +66,25 @@ module Gitploy
     run("sudo #{cmd}")
   end
 
+  def echo(cmd)
+    run("echo \"#{cmd}\"")
+  end
+
   def rake(task)
     run("rake #{task}")
   end
 
   def push!
-    local { run "git push #{config.user}@#{config.host}:#{config.path}/.git #{config.local_branch}:#{config.remote_branch}" }
+    force = "--force " if force?
+    local { run "git push #{force}#{config.user}@#{config.host}:#{config.path}/.git #{config.local_branch}:#{config.remote_branch}" }
+  end
+
+  def newrelic_deployment_marker( options = {} )
+    stage     = options[:stage]    || current_stage
+    user      = options[:user]     || current_user
+    revision  = options[:revision] || current_revision
+    message   = options[:message]  || commit_message
+    run "bundle exec newrelic deployments -e #{stage} --user=#{user} --revision=#{revision} #{message}"
   end
 
   private
@@ -117,8 +130,37 @@ module Gitploy
       end
     end
 
+    def current_user
+      if result = `git config user.email`
+        result.chomp
+      else
+        'unknown'
+      end
+    end
+
+    def current_revision
+      if result = `git rev-parse --short HEAD`
+        result.chomp
+      else
+        'unknown'
+      end
+    end
+
+    def commit_message
+      if result = `git log -1 --pretty=%B`
+        result.chomp
+      else
+        'unknown'
+      end
+    end
+
     def pretend?
       pretend = %w(-p --pretend)
       ARGV.any? { |v| pretend.include? v }
+    end
+
+    def force?
+      force = %w(-f --force)
+      ARGV.any? { |v| force.include? v }
     end
 end

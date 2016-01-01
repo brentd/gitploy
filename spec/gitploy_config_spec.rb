@@ -40,7 +40,7 @@ describe 'Gitploy::Config' do
       config.missing_options.should eql [:path]
     end
     it 'raises error when checked' do
-      Gitploy.stub!(:current_stage).and_return('test')
+      Gitploy.stub(:current_stage).and_return('test')
       config = Gitploy::Config.new
       config.user = 'test'   
       config.host = 'test'

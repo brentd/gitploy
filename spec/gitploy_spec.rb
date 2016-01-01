@@ -84,6 +84,7 @@ describe 'Giploy' do
       end.should raise_error
     end
   end
+
   context 'running queue' do
     it 'adds command to queue' do
       run 'test'
@@ -99,6 +100,11 @@ describe 'Giploy' do
       rake 'test'
       rake 'test'
       instance_variable_get(:@run_queue).should == ['rake test', 'rake test']
+    end
+    it 'adds echo commands to queue' do
+      echo 'test'
+      echo 'test'
+      instance_variable_get(:@run_queue).should == ["echo \"test\"", "echo \"test\""]
     end
     it 'flushes command queue' do
       run 'test'
@@ -125,7 +131,7 @@ describe 'Giploy' do
       end
     end
     it 'flushes run queue after running remote block' do
-      stub!(:pretty_run).and_return(nil)
+      stub(:pretty_run).and_return(nil)
       remote do
         run 'test'
         run 'test'
@@ -148,7 +154,7 @@ describe 'Giploy' do
       instance_variable_get(:@run_queue).should == []
     end
     it 'executes local command from block' do
-      stub!(:pretty_run).and_return(nil)
+      stub(:pretty_run).and_return(nil)
       local do
         run 'test'
         run 'test'
@@ -161,11 +167,42 @@ describe 'Giploy' do
         push!
       end
     end
+    it 'pushes local changes with force' do
+      ARGV[1] = '-f'
+      should_receive(:pretty_run).with("LOCAL",
+        "git push --force deploy@example.org:/var/apps/.git master:master")
+      deploy do
+        push!
+      end
+    end
+    it 'remote command from block evals current_user var' do
+      stub(:current_user).and_return('deploy@example.org')
+      should_receive(:pretty_run).with("example.org", "ssh deploy@example.org 'test && deploy@example.org'")
+      remote do
+        run 'test'
+        run "#{current_user}"
+      end
+    end
   end
   context 'detecting environment' do
     it 'returns current git branch' do
       should_receive(:`).with('git symbolic-ref HEAD').and_return('refs/heads/test')
       send(:current_branch).should == 'test'
+    end
+
+    it 'returns current user email' do
+      should_receive(:`).with('git config user.email').and_return('deploy@example.org')
+      send(:current_user).should == 'deploy@example.org'
+    end
+
+    it 'returns latest git revision fingerprint' do
+      should_receive(:`).with('git rev-parse --short HEAD').and_return('d9f8bed')
+      send(:current_revision).should == 'd9f8bed'
+    end
+
+    it 'returns latest git commit message' do
+      should_receive(:`).with('git log -1 --pretty=%B').and_return('add echo command')
+      send(:commit_message).should == 'add echo command'
     end
   end
 end

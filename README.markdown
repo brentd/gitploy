@@ -45,17 +45,67 @@ strategy. No hooks, very little behind-the-scenes magic - it just does what you 
       remote do
         run "cd #{config.path}"
         run "git reset --hard"
-        run "bundle install --deployment"
+
+        echo "Bundle Install...""
+        run "bundle install --quiet --deployment --without development test"
+        
+        echo "Migrating Database..."
+        run "bundle exec rake db:migrate RAILS_ENV=#{Gitploy.current_stage}"
+
+        echo "Deployment complete. Restarting server!"
         run "touch tmp/restart.txt"
+        
+        # uncomment the line below to send new relic a deployment marker
+        # newrelic_deployment_marker
       end
     end
 
 ### Usage
 
     $ gem install gitploy
-    # create config/deploy.rb
+    # create config/gitploy.rb
     $ gitploy production setup
     $ gitploy production
+
+    # In case of emergency you can do a git push with the --force option
+    $ gitploy production --force
+
+### New Relic Deployment Marker
+
+Gitploy supports sending [New Relic Deployment Markers](https://docs.newrelic.com/docs/apm/new-relic-apm/maintenance/deployment-notifications). 
+
+In your config/gitploy.rb
+    
+    deploy do
+      push!
+      remote do
+        run "cd #{config.path}"
+        run "git reset --hard"
+        run "bundle install --deployment"
+        echo "Deployment complete. Restarting server!"
+        run "touch tmp/restart.txt"
+        
+        # new relic a deployment marker
+        newrelic_deployment_marker
+      end
+    end
+
+The newrelic_deployment_marker supports the following optional overrides:
+
+    deploy do
+      push!
+      remote do
+        run "cd #{config.path}"
+        run "git reset --hard"
+        run "bundle install --deployment"
+        echo "Deployment complete. Restarting server!"
+        run "touch tmp/restart.txt"
+        
+        # new relic a deployment marker
+        newrelic_deployment_marker( stage: 'custom_stage_name', user: 'custom_user', revision: 'custom_revision', message: 'custom_message')
+      end
+    end
+
 
 ### Disclaimer
 
