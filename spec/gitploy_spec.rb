@@ -167,6 +167,14 @@ describe 'Giploy' do
         push!
       end
     end
+    it 'pushes local changes with force' do
+      ARGV[1] = '-f'
+      should_receive(:pretty_run).with("LOCAL",
+        "git push --force deploy@example.org:/var/apps/.git master:master")
+      deploy do
+        push!
+      end
+    end
     it 'remote command from block evals current_user var' do
       stub(:current_user).and_return('deploy@example.org')
       should_receive(:pretty_run).with("example.org", "ssh deploy@example.org 'test && deploy@example.org'")

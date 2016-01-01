@@ -75,7 +75,8 @@ module Gitploy
   end
 
   def push!
-    local { run "git push #{config.user}@#{config.host}:#{config.path}/.git #{config.local_branch}:#{config.remote_branch}" }
+    force = "--force " if force?
+    local { run "git push #{force}#{config.user}@#{config.host}:#{config.path}/.git #{config.local_branch}:#{config.remote_branch}" }
   end
 
   def newrelic_deployment_marker(stage=current_stage, user=current_user, revision=current_revision, message=commit_message)
@@ -152,5 +153,10 @@ module Gitploy
     def pretend?
       pretend = %w(-p --pretend)
       ARGV.any? { |v| pretend.include? v }
+    end
+
+    def force?
+      force = %w(-f --force)
+      ARGV.any? { |v| force.include? v }
     end
 end
