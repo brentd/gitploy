@@ -45,7 +45,13 @@ strategy. No hooks, very little behind-the-scenes magic - it just does what you 
       remote do
         run "cd #{config.path}"
         run "git reset --hard"
-        run "bundle install --deployment"
+
+        echo "Bundle Install...""
+        run "bundle install --quiet --deployment --without development test"
+        
+        echo "Migrating Database..."
+        run "bundle exec rake db:migrate RAILS_ENV=#{Gitploy.current_stage}"
+
         echo "Deployment complete. Restarting server!"
         run "touch tmp/restart.txt"
         
