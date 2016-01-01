@@ -79,7 +79,11 @@ module Gitploy
     local { run "git push #{force}#{config.user}@#{config.host}:#{config.path}/.git #{config.local_branch}:#{config.remote_branch}" }
   end
 
-  def newrelic_deployment_marker(stage=current_stage, user=current_user, revision=current_revision, message=commit_message)
+  def newrelic_deployment_marker( options = {} )
+    stage     = options[:stage]    || current_stage
+    user      = options[:user]     || current_user
+    revision  = options[:revision] || current_revision
+    message   = options[:message]  || commit_message
     run "bundle exec newrelic deployments -e #{stage} --user=#{user} --revision=#{revision} #{message}"
   end
 
