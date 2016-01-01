@@ -117,6 +117,15 @@ module Gitploy
       end
     end
 
+    def current_user
+      if user = `git config user.email`
+        user
+      else
+        'unknown'
+      end
+    end
+
+
     def pretend?
       pretend = %w(-p --pretend)
       ARGV.any? { |v| pretend.include? v }

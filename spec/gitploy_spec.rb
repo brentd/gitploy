@@ -125,7 +125,7 @@ describe 'Giploy' do
       end
     end
     it 'flushes run queue after running remote block' do
-      stub!(:pretty_run).and_return(nil)
+      stub(:pretty_run).and_return(nil)
       remote do
         run 'test'
         run 'test'
@@ -148,7 +148,7 @@ describe 'Giploy' do
       instance_variable_get(:@run_queue).should == []
     end
     it 'executes local command from block' do
-      stub!(:pretty_run).and_return(nil)
+      stub(:pretty_run).and_return(nil)
       local do
         run 'test'
         run 'test'
@@ -161,11 +161,24 @@ describe 'Giploy' do
         push!
       end
     end
+    it 'remote command from block evals current_user var' do
+      stub(:current_user).and_return('deploy@example.org')
+      should_receive(:pretty_run).with("example.org", "ssh deploy@example.org 'test && deploy@example.org'")
+      remote do
+        run 'test'
+        run "#{current_user}"
+      end
+    end
   end
   context 'detecting environment' do
     it 'returns current git branch' do
       should_receive(:`).with('git symbolic-ref HEAD').and_return('refs/heads/test')
       send(:current_branch).should == 'test'
+    end
+
+    it 'returns current user email' do
+      should_receive(:`).with('git config user.email').and_return('deploy@example.org')
+      send(:current_user).should == 'deploy@example.org'
     end
   end
 end
