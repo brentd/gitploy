@@ -66,6 +66,10 @@ module Gitploy
     run("sudo #{cmd}")
   end
 
+  def echo(cmd)
+    run("echo \"#{cmd}\"")
+  end
+
   def rake(task)
     run("rake #{task}")
   end

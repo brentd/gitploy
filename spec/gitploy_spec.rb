@@ -100,6 +100,11 @@ describe 'Giploy' do
       rake 'test'
       instance_variable_get(:@run_queue).should == ['rake test', 'rake test']
     end
+    it 'adds echo commands to queue' do
+      echo 'test'
+      echo 'test'
+      instance_variable_get(:@run_queue).should == ["echo \"test\"", "echo \"test\""]
+    end
     it 'flushes command queue' do
       run 'test'
       run 'test'
