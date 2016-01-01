@@ -84,6 +84,7 @@ describe 'Giploy' do
       end.should raise_error
     end
   end
+
   context 'running queue' do
     it 'adds command to queue' do
       run 'test'
@@ -184,6 +185,16 @@ describe 'Giploy' do
     it 'returns current user email' do
       should_receive(:`).with('git config user.email').and_return('deploy@example.org')
       send(:current_user).should == 'deploy@example.org'
+    end
+
+    it 'returns latest git revision fingerprint' do
+      should_receive(:`).with('git rev-parse --short HEAD').and_return('d9f8bed')
+      send(:current_revision).should == 'd9f8bed'
+    end
+
+    it 'returns latest git commit message' do
+      should_receive(:`).with('git log -1 --pretty=%B').and_return('add echo command')
+      send(:commit_message).should == 'add echo command'
     end
   end
 end

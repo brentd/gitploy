@@ -78,6 +78,10 @@ module Gitploy
     local { run "git push #{config.user}@#{config.host}:#{config.path}/.git #{config.local_branch}:#{config.remote_branch}" }
   end
 
+  def newrelic_deployment_marker(stage=current_stage, user=current_user, revision=current_revision, message=commit_message)
+    run "bundle exec newrelic deployments -e #{stage} --user=#{user} --revision=#{revision} #{message}"
+  end
+
   private
 
   #FIXME move to representation class
@@ -122,13 +126,28 @@ module Gitploy
     end
 
     def current_user
-      if user = `git config user.email`
-        user
+      if result = `git config user.email`
+        result.chomp
       else
         'unknown'
       end
     end
 
+    def current_revision
+      if result = `git rev-parse --short HEAD`
+        result.chomp
+      else
+        'unknown'
+      end
+    end
+
+    def commit_message
+      if result = `git log -1 --pretty=%B`
+        result.chomp
+      else
+        'unknown'
+      end
+    end
 
     def pretend?
       pretend = %w(-p --pretend)
