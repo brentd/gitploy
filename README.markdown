@@ -1,17 +1,8 @@
-## Gitploy: dead-simple deployment DSL created with git in mind
+# Gitploy: dead-simple deployment DSL created with git in mind
 
-### Why yet another deployment solution?
+## ⚠️ NOT MAINTAINED ⚠️
 
-* Because Capistrano is bloated
-* Because, no, I don't want to use rake for deployment, thank you
-* Because I'm sick of having to jump through flaming hoops just to tweak the arguments of some stupid command
-* Because I want something bare minimum, git-based, and dead-simple
-* Because I felt like it
-
-Gitploy was created to do dead-simple git-push based deployments. It doesn't use rake, it doesn't
-require git hooks, it just does the bare minimum. It's so minimal, in fact, that it doesn't even
-come with its own "recipe" - Gitploy is actually just a DSL to quickly define your own deployment
-strategy. No hooks, very little behind-the-scenes magic - it just does what you tell it to.
+This project is not maintained. I would recommend looking elsewhere for your deployment needs :)
 
 ### Example config/gitploy.rb
 
@@ -56,12 +47,3 @@ strategy. No hooks, very little behind-the-scenes magic - it just does what you 
     # create config/deploy.rb
     $ gitploy production setup
     $ gitploy production
-
-### Disclaimer
-
-Gitploy is super alpha - don't use it yet, unless you're just that baller. Are you?
-
-### Known issues
-
-* Not enough documentation
-* DSL implementation is pretty dumb and needs refactoring
